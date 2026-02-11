@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "title": "Sekų Išlyginimas",
+    "description": "Suderink DNR sekas ir laimėk!"
+  },
+  "ui": {
+    "dimensions": {
+      "width": 1200,
+      "height": 900,
+      "centerX": 600
+    },
+    "layout": {
+      "headerY": 50,
+      "contentTop": 140,
+      "footerY": 750
+    },
+    "colors": {
+      "text": "#2C3E50",
+      "muted": "#7F8C8D",
+      "white": "0xffffff",
+      "bg": "0xf8f9fa",
+      "primary": "#27AE60",
+      "primaryHover": "#219150",
+      "info": "#3498DB",
+      "danger": "#E74C3C",
+      "warn": "#F39C12"
+    },
+    "theme": {
+      "gradientTop": "#e3f2fd",
+      "gradientBottom": "#fce4ec"
+    },
+    "particles": {
+      "count": 15,
+      "sizeRange": [20, 40],
+      "alpha": 0.15
+    }
+  },
+  "gameplay": {
+    "bases": ["A", "C", "G", "T"],
+    "baseColors": {
+      "A": "#27ae60",
+      "T": "#2980b9",
+      "G": "#f39c12",
+      "C": "#8e44ad",
+      "-": "#bdc3c7"
+    },
+    "difficulties": {
+      "easy": {
+        "label": "Lengvas",
+        "minLen": 5,
+        "maxLen": 8,
+        "similarity": 0.80,
+        "scoring": {
+          "match": 2,
+          "mismatch": -1,
+          "gap": -1
+        },
+        "numSeqRange": [2, 3]
+      },
+      "medium": {
+        "label": "Vidutinis",
+        "minLen": 7,
+        "maxLen": 11,
+        "similarity": 0.65,
+        "scoring": {
+          "match": 2,
+          "mismatch": -1,
+          "gap": -2
+        },
+        "numSeqRange": [2, 5]
+      },
+      "hard": {
+        "label": "Sunkus",
+        "minLen": 10,
+        "maxLen": 14,
+        "similarity": 0.50,
+        "scoring": {
+          "match": 2,
+          "mismatch": -2,
+          "gap": -3
+        },
+        "numSeqRange": [2, 6]
+      }
+    },
+    "grid": {
+      "tileSize": 40,
+      "tileGap": 4,
+      "startX": 200,
+      "startY": 150
+    }
+  },
+  "text": {
+    "start": {
+      "buttonStart": "Pradėti"
+    },
+    "tutorial": {
+      "title": "Kaip žaisti?",
+      "buttonContinue": "Supratau →",
+      "exampleLabel": "Pavyzdys:",
+      "instructions": [
+        {
+          "title": "Tikslas",
+          "text": "Sustatyk raides taip, kad kuo daugiau stulpelių atrodytų tvarkingai.\nTam naudok tarpus (-)."
+        },
+        {
+          "title": "Kaip valdyti",
+          "text": "Spausk raidę → įterpia (-) prieš ją.\nSpausk (-) → pašalina tarpą.\nVilk (-) → perkelia tarpą."
+        },
+        {
+          "title": "Kaip gerinti rezultatą",
+          "text": "Užvesk pelę ant stulpelio ir pamatysi\nstulpelio vertę.\nBandyk gauti kuo didesnę stulpelio vertę."
+        }
+      ]
+    },
+    "setup": {
+      "title": "Pasirink lygį",
+      "sequenceCountLabel": "Sekų skaičius:",
+      "difficultyLabel": "Sudėtingumas:",
+      "buttonStart": "Pradėti →",
+      "buttonBack": "← Atgal"
+    },
+    "game": {
+      "hint": "Dėliok tarpus (-), kad sutaptų daugiau stulpelių ir jų suma būtų maksimali",
+      "scoreLabel": "Stulpelių suma:",
+      "scoringLegend": {
+        "match": "Sutapimas:",
+        "mismatch": "Nesutapimas:",
+        "gap": "Tarpas:"
+      },
+      "sequenceLabelPrefix": "S",
+      "buttonBack": "Grįžti",
+      "buttonCheck": "Patikrinti",
+      "buttonNewGame": "Naujas žaidimas",
+      "solutionTitle": "Teisingiausias išlyginimas:",
+      "columnTooltip": {
+        "columnPrefix": "Stulpelis",
+        "sumLabel": "Stulpelio suma ="
+      }
+    }
+  }
+}

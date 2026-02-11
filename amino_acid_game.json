@@ -1,0 +1,366 @@
+{
+  "meta": {
+    "title": "Aminorūgščių Klasifikavimas",
+    "description": "Mokykis aminorūgščių savybes ir klasifikaciją"
+  },
+  "items": {
+    "Ala": "Alaninas",
+    "Val": "Valinas",
+    "Leu": "Leucinas",
+    "Ile": "Izoleucinas",
+    "Met": "Metioninas",
+    "Phe": "Fenilalaninas",
+    "Trp": "Triptofanas",
+    "Pro": "Prolinas",
+    "Gly": "Glicinas",
+    "Ser": "Serinas",
+    "Thr": "Treoninas",
+    "Cys": "Cisteinas",
+    "Tyr": "Tirozinas",
+    "Asn": "Asparaginas",
+    "Gln": "Glutaminas",
+    "Asp": "Asparto rūgštis",
+    "Glu": "Glutamo rūgštis",
+    "Lys": "Lizinas",
+    "Arg": "Argininas",
+    "His": "Histidinas"
+  },
+  "groups": {
+    "nepolines": {
+      "label": "Nepolinės",
+      "description": "Nėra poliarinių grupių, hidrofobinės",
+      "color": "#e74c3c",
+      "icon": "molecule",
+      "members": [
+        "Ala",
+        "Val",
+        "Leu",
+        "Ile",
+        "Met",
+        "Phe",
+        "Trp",
+        "Pro",
+        "Gly"
+      ]
+    },
+    "polines_neutralios": {
+      "label": "Polinės neutralios",
+      "description": "Turi poliarines grupes, nėra užkrautos",
+      "color": "#3498db",
+      "icon": "water",
+      "members": [
+        "Ser",
+        "Thr",
+        "Cys",
+        "Tyr",
+        "Asn",
+        "Gln"
+      ]
+    },
+    "rugsties": {
+      "label": "Rūgštinės",
+      "description": "Neigiama užkrauta šoninė grandinė",
+      "color": "#f39c12",
+      "icon": "minus",
+      "members": [
+        "Asp",
+        "Glu"
+      ]
+    },
+    "bazines": {
+      "label": "Bazinės",
+      "description": "Teigiama užkrauta šoninė grandinė",
+      "color": "#9b59b6",
+      "icon": "plus",
+      "members": [
+        "Lys",
+        "Arg",
+        "His"
+      ]
+    }
+  },
+  "properties": {
+    "hidrofobiskumas": {
+      "hidrofobines": {
+        "label": "Hidrofobinės",
+        "description": "Nesąveikauja su vandeniu",
+        "color": "#c0392b",
+        "icon": "oil",
+        "members": [
+          "Ala",
+          "Val",
+          "Leu",
+          "Ile",
+          "Met",
+          "Phe",
+          "Trp",
+          "Pro"
+        ]
+      },
+      "hidrofilines": {
+        "label": "Hidrofilinės",
+        "description": "Sąveikauja su vandeniu",
+        "color": "#2980b9",
+        "icon": "water",
+        "members": [
+          "Ser",
+          "Thr",
+          "Cys",
+          "Tyr",
+          "Asn",
+          "Gln",
+          "Asp",
+          "Glu",
+          "Lys",
+          "Arg",
+          "His",
+          "Gly"
+        ]
+      }
+    },
+    "aromatiskumas": {
+      "aromatines": {
+        "label": "Aromatinės",
+        "description": "Turi aromatinius žiedus",
+        "color": "#8e44ad",
+        "icon": "molecules",
+        "members": [
+          "Phe",
+          "Trp",
+          "Tyr",
+          "His"
+        ]
+      },
+      "alifatines": {
+        "label": "Alifatinės",
+        "description": "Neturi aromatinių žiedų",
+        "color": "#16a085",
+        "icon": "molecules",
+        "members": [
+          "Ala",
+          "Val",
+          "Leu",
+          "Ile",
+          "Met",
+          "Pro",
+          "Gly",
+          "Ser",
+          "Thr",
+          "Cys",
+          "Asn",
+          "Gln",
+          "Asp",
+          "Glu",
+          "Lys",
+          "Arg"
+        ]
+      }
+    }
+  },
+  "gameplay": {
+    "classificationTypes": [
+      {
+        "id": "polarumas",
+        "question": "Kokio tipo yra ši aminorūgštis?",
+        "groups": [
+          "nepolines",
+          "polines_neutralios",
+          "rugsties",
+          "bazines"
+        ]
+      },
+      {
+        "id": "hidrofobiskumas",
+        "question": "Kokias savybes turi ši aminorūgštis?",
+        "property": "hidrofobiskumas"
+      },
+      {
+        "id": "aromatiskumas",
+        "question": "Kokia ši aminorūgštis pagal struktūrą?",
+        "property": "aromatiskumas"
+      }
+    ]
+  },
+  "assets": {
+    "images": {
+      "dna": "assets/dna.png",
+      "book": "assets/book-open-text.png",
+      "trophy": "assets/trophy.png",
+      "molecule": "assets/molecule.png",
+      "molecules": "assets/molecules.png",
+      "oil": "assets/drop.png",
+      "water": "assets/target.png",
+      "plus": "assets/plus-circle.png",
+      "minus": "assets/minus-circle.png",
+      "checkCircle": "assets/check-circle.png"
+    }
+  },
+  "ui": {
+    "theme": {
+      "gradientTop": "#e3f2fd",
+      "gradientBottom": "#fce4ec"
+    },
+    "particles": {
+      "count": 15,
+      "sizeRange": [
+        20,
+        40
+      ],
+      "alpha": 0.15
+    },
+    "dimensions": {
+      "width": 900,
+      "height": 900,
+      "centerX": 450
+    },
+    "layout": {
+      "headerY": 46,
+      "headerH": 78,
+      "contentTop": 140,
+      "footerY": 742,
+      "cardW": 720,
+      "cardH": 96,
+      "gap": 18,
+      "choiceW": 360,
+      "choiceH": 92,
+      "choiceGapX": 30,
+      "choiceGapY": 18
+    },
+    "colors": {
+      "text": "#2C3E50",
+      "muted": "#7F8C8D",
+      "white": "0xffffff",
+      "stroke": "0xDFE6E9",
+      "primary": "#27AE60",
+      "primaryHover": "#219150",
+      "info": "#3498DB",
+      "infoHover": "#2980B9",
+      "danger": "#E74C3C",
+      "warn": "#F39C12"
+    },
+    "groupAccentColors": {
+      "nepolines": "0x95a5a6",
+      "polines_neutralios": "0x3498db",
+      "rugsties": "0xe74c3c",
+      "bazines": "0x9b59b6",
+      "hidrofobines": "0x27ae60",
+      "hidrofilines": "0x2980b9",
+      "aromatines": "0x9b59b6",
+      "alifatines": "0x16a085"
+    },
+    "typeColors": {
+      "polarumas": "#E74C3C",
+      "hidrofobiskumas": "#3498DB",
+      "aromatiskumas": "#9B59B6"
+    }
+  },
+  "lessons": {
+    "polarumas": {
+      "title": "Poliarumas",
+      "intro": "Šiame režime klasifikuoji pagal šoninės grandinės poliarumą. Pirmiausia atpažink, ar aminorūgštis turi krūvį (rūgštinės/bazinės). Jei krūvio nėra, skirk polines neutralias nuo nepolinių.",
+      "groups": [
+        {
+          "key": "nepolines",
+          "label": "Nepolinės",
+          "tip": "Taisyklė: neturi krūvio ir dažniausiai yra hidrofobinės.\nĮsiminti: Ala, Val, Leu, Ile, Met, Phe, Trp, Pro, Gly."
+        },
+        {
+          "key": "polines_neutralios",
+          "label": "Polinės (neutralios)",
+          "tip": "Taisyklė: nėra įkrautos, bet yra polinės (gali sudaryti sąveikas su vandeniu).\nĮsiminti: Ser, Thr, Cys, Tyr, Asn, Gln.\nSpąstas: Tyr turi žiedą, bet dėl –OH šiame žaidime priskiriama polinėms."
+        },
+        {
+          "key": "rugsties",
+          "label": "Rūgštinės",
+          "tip": "Taisyklė: turi neigiamą krūvį.\nĮsiminti: Asp, Glu."
+        },
+        {
+          "key": "bazines",
+          "label": "Bazinės",
+          "tip": "Taisyklė: turi teigiamą krūvį.\nĮsiminti: Lys, Arg, His.\nSpąstas: His dažnai laikoma „tarpine“, bet šiame žaidime priskiriama bazinėms."
+        }
+      ]
+    },
+    "hidrofobiskumas": {
+      "title": "Hidrofobiškumas",
+      "intro": "Šiame režime klasifikuoji pagal tai, kaip aminorūgšties šoninė grandinė sąveikauja su vandeniu: hidrofobinės vengia vandens, o hidrofilinės su juo sąveikauja (dažnai dėl poliarių grupių arba krūvio).",
+      "groups": [
+        {
+          "key": "hidrofobines",
+          "label": "Hidrofobinės",
+          "tip": "Taisyklė: dažniausiai vengia vandens ir dažniau būna baltymo viduje.\nĮsiminti: Ala, Val, Leu, Ile, Met, Phe, Trp, Pro."
+        },
+        {
+          "key": "hidrofilines",
+          "label": "Hidrofilinės",
+          "tip": "Taisyklė: mėgsta vandenį; į šią grupę patenka polinės ir įkrautos aminorūgštys.\nĮsiminti: Ser, Thr, Cys, Tyr, Asn, Gln, Asp, Glu, Lys, Arg, His.\nSpąstas: Tyr dėl –OH laikoma hidrofiline."
+        }
+      ]
+    },
+    "aromatiskumas": {
+      "title": "Aromatiškumas",
+      "intro": "Šiame režime klasifikuoji tik pagal vieną požymį: ar aminorūgšties šoninėje grandinėje yra aromatinis žiedas. Neklasifikuok pagal poliarumą ar hidrofobiškumą — svarbus tik žiedas.",
+      "groups": [
+        {
+          "key": "aromatines",
+          "label": "Aromatinės",
+          "tip": "Taisyklė: turi aromatinį žiedą.\nĮsiminti: Phe, Trp, Tyr, His.\nSpąstas: His irgi priskiriama aromatinėms (turi žiedą)."
+        },
+        {
+          "key": "alifatines",
+          "label": "Alifatinės",
+          "tip": "Taisyklė: neturi aromatinio žiedo.\nVadinasi: visos kitos 16 aminorūgščių."
+        }
+      ]
+    }
+  },
+  "text": {
+    "start": {
+      "buttonStart": "Pradėti",
+      "classificationTypeTitle": "Klasifikacijos tipas",
+      "classificationTypeSubtitle": "Kokias savybes nori mokytis?",
+      "lessonSubtitle": "Perskaityk prieš pradedant",
+      "buttonBack": "← Atgal",
+      "buttonContinue": "Tęsti",
+      "buttonStartTraining": "Pradėti treniruotę"
+    },
+    "game": {
+      "buttonBack": "← Atgal",
+      "buttonNext": "Toliau →",
+      "masteredLabel": "Įsisavinta:",
+      "reviewLabel": "Kartoti:",
+      "resultsTitle": "Rezultatai",
+      "reviewWrongButton": "Treniruoti klaidas",
+      "repeatTrainingButton": "Kartoti treniruotę",
+      "pageLabel": "Puslapis",
+      "feedback": {
+        "correct": "✓ Teisingai!",
+        "incorrect": "✗ Neteisingai",
+        "groupLabel": "Grupė:",
+        "correctGroupLabel": "Teisinga grupė:"
+      },
+      "explanations": {
+        "nepolines": "Neturi poliarių grupių → dažniau baltymo viduje.",
+        "polines_neutralios": "Poliarios, bet be krūvio → gali sudaryti H-ryšius.",
+        "rugsties": "Neigiamas krūvis (COO⁻) → rūgštinės.",
+        "bazines": "Teigiamas krūvis (NH₃⁺) → bazinės.",
+        "hidrofobines": "Hidrofobinės → vengia vandens.",
+        "hidrofilines": "Hidrofilinės → mėgsta vandenį.",
+        "aromatines": "Aromatinės → turi aromatinį žiedą.",
+        "alifatines": "Alifatinės → neturi aromatinio žiedo.",
+        "default": "Įsidėmėk šią klasifikaciją!"
+      },
+      "headerLabels": {
+        "polarumas": "Poliarumas",
+        "hidrofobiskumas": "Hidrofob.",
+        "aromatiskumas": "Aromat."
+      },
+      "tableHeaders": {
+        "code": "Kodas",
+        "name": "Pavadinimas",
+        "result": "Rez.",
+        "correct": "Teisinga"
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "title": "Kodonų žaidimas",
+    "description": "Treniruokis atpažinti genetinio kodo kodonus mRNR sekoje"
+  },
+
+  "gameplay": {
+    "type": "sequence-matching",
+    "bases": ["A", "U", "G", "C"],
+    "itemSize": 3
+  },
+
+  "items": {
+    "AUG": "Met", "UUU": "Phe", "UUC": "Phe", "UUA": "Leu", "UUG": "Leu",
+    "CUU": "Leu", "CUC": "Leu", "CUA": "Leu", "CUG": "Leu",
+    "AGC": "Ser", "UCU": "Ser", "UCC": "Ser", "UCA": "Ser", "UCG": "Ser", "AGU": "Ser",
+    "CAA": "Gln", "CAG": "Gln", "AGA": "Arg", "AGG": "Arg", "CGU": "Arg",
+    "CGC": "Arg", "CGA": "Arg", "CGG": "Arg", "UAU": "Tyr", "UAC": "Tyr",
+    "UGU": "Cys", "UGC": "Cys", "UAA": "Stop", "UAG": "Stop", "UGA": "Stop",
+    "AAG": "Lys", "AAA": "Lys", "AUU": "Ile", "AUC": "Ile", "AUA": "Ile",
+    "GUU": "Val", "GUC": "Val", "GUA": "Val", "GUG": "Val",
+    "CCU": "Pro", "CCC": "Pro", "CCA": "Pro", "CCG": "Pro",
+    "ACU": "Thr", "ACC": "Thr", "ACA": "Thr", "ACG": "Thr",
+    "GCU": "Ala", "GCC": "Ala", "GCA": "Ala", "GCG": "Ala",
+    "AAU": "Asn", "AAC": "Asn", "GAU": "Asp", "GAC": "Asp",
+    "GAA": "Glu", "GAG": "Glu", "UGG": "Trp", "GGU": "Gly",
+    "GGC": "Gly", "GGA": "Gly", "GGG": "Gly", "CAU": "His", "CAC": "His"
+  },
+
+  "groups": {
+    "nepolines": {
+      "label": "Nepolinės",
+      "color": "#85c1e9",
+      "icon": "drop",
+      "members": ["Ala", "Val", "Leu", "Ile", "Pro", "Phe", "Trp", "Met", "Gly"]
+    },
+    "polines": {
+      "label": "Polinės",
+      "color": "#82e0aa",
+      "icon": "target",
+      "members": ["Ser", "Thr", "Cys", "Tyr", "Asn", "Gln"]
+    },
+    "teigiamos": {
+      "label": "Teigiamo krūvio (bazinės)",
+      "color": "#f1948a",
+      "icon": "plusCircle",
+      "members": ["Lys", "Arg", "His"]
+    },
+    "neigiamos": {
+      "label": "Neigiamo krūvio (rūgštinės)",
+      "color": "#f8c471",
+      "icon": "minusCircle",
+      "members": ["Asp", "Glu"]
+    },
+    "stop": {
+      "label": "Stop kodonai",
+      "color": "#b0b8bb",
+      "icon": "stopCircle",
+      "members": ["Stop"]
+    }
+  },
+
+  "difficulties": {
+    "lengvas": {
+      "label": "Lengvas",
+      "color": "#27ae60",
+      "description": "Kodonas matomas 7s - tiek laiko įsiminti",
+      "icon": "lightbulb",
+      "introTime": 7000,
+      "introTimeChallenge": 7000,
+      "sequenceLengthLearning": [18, 24],
+      "sequenceLengthChallenge": 18,
+      "timeLimitPerCodon": 30
+    },
+    "vidutinis": {
+      "label": "Vidutinis",
+      "color": "#f39c12",
+      "description": "Kodonas matomas 5s - tiek laiko įsiminti",
+      "icon": "timer",
+      "introTime": 5000,
+      "introTimeChallenge": 5000,
+      "sequenceLengthLearning": [27, 36],
+      "sequenceLengthChallenge": 30,
+      "timeLimitPerCodon": 20
+    },
+    "sunkus": {
+      "label": "Sunkus",
+      "color": "#e74c3c",
+      "description": "Kodonas matomas 3s - tiek laiko įsiminti",
+      "icon": "warning",
+      "introTime": 3000,
+      "introTimeChallenge": 3000,
+      "sequenceLengthLearning": [45, 60],
+      "sequenceLengthChallenge": 36,
+      "timeLimitPerCodon": 15
+    }
+  },
+
+  "modes": {
+    "mokymosi": {
+      "label": "Mokymosi",
+      "color": "#3498db",
+      "description": "Mokykitės su užuominomis",
+      "icon": "book",
+      "showHints": true,
+      "showReference": true,
+      "instantFeedback": true
+    },
+    "issukio": {
+      "label": "Iššūkio",
+      "color": "#e67e22",
+      "description": "Tikrinkite savo žinias su laikmačiu",
+      "icon": "trophy",
+      "showHints": false,
+      "showReference": false,
+      "timerEnabled": true
+    }
+  },
+
+  "ui": {
+    "width": 900,
+    "height": 900,
+    "theme": {
+      "gradientTop": "#e3f2fd",
+      "gradientBottom": "#fce4ec",
+      "primaryColor": "#3498db",
+      "successColor": "#27ae60",
+      "errorColor": "#e74c3c"
+    },
+    "particles": {
+      "count": 15,
+      "icon": "dna",
+      "sizeRange": [20, 40],
+      "alpha": 0.15
+    },
+    "groupSelectionTitle": "Pasirinkite aminorūgščių grupes",
+    "groupSelectionSubtitle": "Pasirinkite aminorūgščių grupes, kurių kodonus atpažinsite mRNR sekoje",
+    "itemsName": "kodonų",
+    "membersName": "aminorūgščių",
+    "referenceTitle": "Kodonų lentelė",
+    "resultsHeaders": {
+      "item": "Kodonas",
+      "value": "Aminorūgštis"
+    }
+  },
+
+  "assets": {
+    "images": {
+      "dna": "assets/dna.png",
+      "book": "assets/book-open-text.png",
+      "trophy": "assets/trophy.png",
+      "circle": "assets/circle.png",
+      "checkCircle": "assets/check-circle.png",
+      "arrowLeft": "assets/left.png",
+      "check": "assets/check.png",
+      "wrong": "assets/delete.png",
+      "drop": "assets/drop.png",
+      "target": "assets/target.png",
+      "plusCircle": "assets/plus-circle.png",
+      "minusCircle": "assets/minus-circle.png",
+      "stopCircle": "assets/stop-circle.png",
+      "lightbulb": "assets/lightbulb.png",
+      "timer": "assets/timer.png",
+      "warning": "assets/warning.png"
+    }
+  }
+}
