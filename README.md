@@ -65,8 +65,3 @@ Redaguokite `index.html` failą ir pakeiskite import eilutę:
 <!-- Sekų lygiavimas -->
 <script type="module" src="sequence_alignment_game.js"></script>
 ```
-
-
-## Licencija
-
-Projektas sukurtas edukaciniais tikslais.
