@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "title": "Motyvo paieška",
+    "description": "Rask l-merų rinkinį, kuris maksimaliai padidina konsensuso svorį."
+  },
+  "ui": {
+    "width": 1400,
+    "height": 900
+  },
+  "alphabet": ["A", "T", "G", "C"],
+  "lOptions": [3, 4, 5],
+  "sequenceLengthOptions": [
+    { "label": "Trumpa", "value": 7 },
+    { "label": "Vidutinė", "value": 8 },
+    { "label": "Ilga", "value": 9 }
+  ],
+  "sequenceCountOptions": [
+    { "label": "3 sekos", "value": 3 },
+    { "label": "4 sekos", "value": 4 }
+  ],
+  "generation": {
+    "enabled": true,
+    "minOptimalScoreRatio": 0.65,
+    "maxAttempts": 300
+  },
+  "exampleTask": {
+    "id": "exam-example",
+    "title": "Kontrolinio pavyzdys",
+    "l": 5,
+    "targetScore": 13,
+    "optimalScore": 13,
+    "sequences": [
+      "CTCATCA",
+      "TAGTGAG",
+      "ACAGCAG",
+      "TGCCAAG"
+    ],
+    "hint": "Iš kiekvienos sekos pasirink po vieną 5-merą. Geras rinkinys turi kuo daugiau sutampančių nukleotidų stulpeliuose."
+  }
+}

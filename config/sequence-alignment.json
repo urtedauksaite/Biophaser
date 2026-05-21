@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Sekų išlyginimas",
+    "description": "Sulygink sekas rankiniu būdu ir rask geriausią jų atitikimą."
+  },
+  "ui": {
+    "dimensions": {
+      "width": 1200,
+      "height": 900,
+      "centerX": 600
+    },
+    "layout": {
+      "headerY": 50,
+      "contentTop": 140,
+      "footerY": 760
+    },
+    "colors": {
+      "text": "#263238",
+      "muted": "#6B7280",
+      "white": "0xffffff",
+      "bg": "0xf8fafc",
+      "primary": "#10B981",
+      "primaryHover": "#059669",
+      "info": "#38BDF8",
+      "danger": "#EF4444",
+      "warn": "#F59E0B"
+    },
+    "theme": {
+      "gradientTop": "#F8FAFC",
+      "gradientBottom": "#F1F5F9"
+    },
+    "particles": {
+      "count": 2,
+      "sizeRange": [12, 22],
+      "alpha": 0.015
+    }
+  },
+  "gameplay": {
+    "bases": ["A", "C", "G", "T"],
+    "baseColors": {
+      "A": "#22C55E",
+      "T": "#38BDF8",
+      "G": "#F59E0B",
+      "C": "#A855F7",
+      "-": "#94A3B8"
+    },
+    "difficulties": {
+      "easy": {
+        "label": "Lengvas",
+        "minLen": 5,
+        "maxLen": 8,
+        "similarity": 0.80,
+        "scoring": {
+          "match": 2,
+          "mismatch": -1,
+          "gap": -1
+        },
+        "numSeqRange": [2, 3]
+      },
+      "medium": {
+        "label": "Vidutinis",
+        "minLen": 7,
+        "maxLen": 11,
+        "similarity": 0.65,
+        "scoring": {
+          "match": 2,
+          "mismatch": -1,
+          "gap": -2
+        },
+        "numSeqRange": [2, 5]
+      },
+      "hard": {
+        "label": "Sunkus",
+        "minLen": 10,
+        "maxLen": 14,
+        "similarity": 0.50,
+        "scoring": {
+          "match": 2,
+          "mismatch": -2,
+          "gap": -3
+        },
+        "numSeqRange": [2, 6]
+      }
+    },
+    "grid": {
+      "tileSize": 46,
+      "tileGap": 4,
+      "startX": 250,
+      "startY": 210
+    }
+  },
+  "text": {
+    "start": {
+      "buttonStart": "Pradėti"
+    },
+    "tutorial": {
+      "title": "Kaip žaisti?",
+      "buttonContinue": "Tęsti į nustatymus →",
+      "exampleLabel": "Mini pavyzdys",
+      "instructions": [
+        {
+          "title": "Spausk raidę",
+          "text": "Įterpsi tarpą prieš pasirinktą bazę."
+        },
+        {
+          "title": "Tempk tarpą",
+          "text": "Perkelk tarpą į geresnę vietą."
+        },
+        {
+          "title": "Stebėk balą",
+          "text": "Geri stulpeliai didina rezultatą."
+        },
+        {
+          "title": "Pateik sprendimą",
+          "text": "Palygink rezultatą su optimaliu."
+        }
+      ]
+    },
+    "setup": {
+      "title": "Pasirink bandymą",
+      "sequenceCountLabel": "Sekų skaičius",
+      "difficultyLabel": "Sunkumas",
+      "buttonStart": "Pradėti žaidimą →",
+      "buttonBack": "← Atgal"
+    },
+    "game": {
+      "hint": "Dėliok tarpus, kad sutaptų daugiau bazių stulpeliuose",
+      "scoreLabel": "Balas:",
+      "scoringLegend": {
+        "match": "Sutapimas:",
+        "mismatch": "Nesutapimas:",
+        "gap": "Tarpas:"
+      },
+      "sequenceLabelPrefix": "S",
+      "buttonBack": "Grįžti",
+      "buttonCheck": "Patikrinti",
+      "buttonNewGame": "Naujas žaidimas",
+      "solutionTitle": "Optimalus išlyginimas:",
+      "columnTooltip": {
+        "columnPrefix": "Stulpelis",
+        "sumLabel": "Suma ="
+        }
+    }
+  }
+}
