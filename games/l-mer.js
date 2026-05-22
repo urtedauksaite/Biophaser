@@ -1,7 +1,7 @@
 import { BioPhaser } from '../core/bio-phaser.js';
 import { Progress } from '../core/progress.js';
 
-const config = await BioPhaser.Utils.ConfigLoader.load('config/i-mer.json');
+const config = await BioPhaser.Utils.ConfigLoader.load('config/l-mer.json');
 config.width = 1400;
 config.height = 900;
 
@@ -1110,7 +1110,7 @@ class MotifTaskScene extends BaseScene {
         const safeScore = Number.isFinite(currentScore) ? currentScore : 0;
         const safeTotal = Number.isFinite(optimalScore) && optimalScore > 0 ? optimalScore : 1;
 
-        Progress.save('imer', {
+        Progress.save('lmer', {
             score: safeScore,
             total: safeTotal,
             details: {

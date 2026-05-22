@@ -32,11 +32,11 @@ const GAMES = [
         icon: 'dna', url: 'sequence-alignment.html', displayType: 'score'
     },
     {
-        key: 'imer',
+        key: 'lmer',
         title: 'Motyvo paieška',
         description: 'Rask geriausią l-merų rinkinį.',
         accent: 0x8B5CF6, soft: 0xF5F3FF,
-        icon: 'dna', url: 'i-mer.html', displayType: 'fraction'
+        icon: 'dna', url: 'l-mer.html', displayType: 'fraction'
     }
 ];
 

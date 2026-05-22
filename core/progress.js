@@ -4,12 +4,17 @@ const GAME_PALETTES = {
     amino:     { accent: '#F97316', soft: 0xFFF7ED, tint: '#9A3412' },
     codon:     { accent: '#38BDF8', soft: 0xF0F9FF, tint: '#0C4A6E' },
     alignment: { accent: '#10B981', soft: 0xECFDF5, tint: '#065F46' },
+    lmer:      { accent: '#8B5CF6', soft: 0xF5F3FF, tint: '#5B21B6' },
     imer:      { accent: '#8B5CF6', soft: 0xF5F3FF, tint: '#5B21B6' },
     default:   { accent: '#10B981', soft: 0xECFDF5, tint: '#065F46' }
 };
 
+function normalizeGameKey(gameKey) {
+    return gameKey === 'imer' ? 'lmer' : gameKey;
+}
+
 function getPalette(gameKey) {
-    return GAME_PALETTES[gameKey] || GAME_PALETTES.default;
+    return GAME_PALETTES[normalizeGameKey(gameKey)] || GAME_PALETTES.default;
 }
 
 function metricTone(value, { good = true } = {}) {
@@ -70,7 +75,8 @@ const Progress = {
     save(gameKey, { score, total, details = {} }) {
         if (!total) return;
         const data    = load();
-        const prev    = normalizeEntry(data[gameKey]);
+        const key     = normalizeGameKey(gameKey);
+        const prev    = normalizeEntry(data[key] ?? data.imer);
         const now     = new Date().toISOString();
         const current = makeAttempt(score, total, details, now);
 
@@ -84,7 +90,7 @@ const Progress = {
             (current.percent === prevBestPercent && current.score > prevBestScore);
         const best = isBetter ? current : prev.best;
 
-        data[gameKey] = {
+        data[key] = {
             attempts,
             best,
             last:        current,
@@ -92,11 +98,14 @@ const Progress = {
             improvement: current.percent - first.percent,
             history
         };
+        if (key === 'lmer') delete data.imer;
         store(data);
     },
 
     get(gameKey) {
-        return normalizeEntry(load()[gameKey]);
+        const data = load();
+        const key = normalizeGameKey(gameKey);
+        return normalizeEntry(data[key] ?? (key === 'lmer' ? data.imer : undefined));
     },
 
     formatBadge(gameKey, displayType) {

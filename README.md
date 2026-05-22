@@ -7,7 +7,7 @@ Projektas šiuo metu turi kelis atskirus žaidimus:
 - aminorūgščių klasifikavimas
 - kodonų žaidimas
 - sekų išlyginimas
-- i-mer
+- l-mer
 
 ## Kaip pasileisti
 
