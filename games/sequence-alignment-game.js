@@ -708,7 +708,6 @@ class SetupScene extends BioPhaser.BioScene {
 class GameScene extends BioPhaser.BioScene {
     constructor() {
         super('Game', config);
-        this.DEBUG = false;
     }
     
     init(data) {
@@ -800,16 +799,6 @@ class GameScene extends BioPhaser.BioScene {
         this.targetScore = target.targetScore;
         this.targetAlignment = target.targetAlignment;
         this.alignmentMethod = target.method;
-        
-        if (this.DEBUG) {
-            console.log('=== ALIGNMENT DEBUG ===');
-            console.log('Sequences:', this.sequences);
-            console.log('Target Alignment:', this.targetAlignment);
-            console.log('Target Score:', this.targetScore);
-            console.log('Method:', this.alignmentMethod);
-            console.log('Scoring:', this.scoring);
-            console.log('=====================');
-        }
     }
     
     renderUI() {
