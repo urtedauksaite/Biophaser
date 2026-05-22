@@ -2,6 +2,9 @@
 import { BioPhaser } from '../core/bio-phaser.js';
 import { Progress } from '../core/progress.js';
 
+// Kodonų žaidimo modulis.
+// Jame atskirtas pasiruošimo ekranas ir pagrindinė žaidimo scena,
+// kad vartotojo pasirinkti parametrai būtų perduodami aiškiai.
 const config = await BioPhaser.Utils.ConfigLoader.load('config/codon-game.json');
 config.width = 1400;
 config.height = 900;
@@ -11,6 +14,8 @@ const UI = { W: 1400, H: 900, CX: 700, CY: 450 };
 const FONT  = BioPhaser.Theme.font;
 const THEME = BioPhaser.Theme.colors;
 
+// Ši scena surenka vartotojo pasirinkimus:
+// aminorūgščių grupes, režimą ir sunkumo lygį.
 class CodonStartScene extends BioPhaser.BioScene {
     constructor() {
         super('CodonStart', config);
@@ -19,10 +24,18 @@ class CodonStartScene extends BioPhaser.BioScene {
         this.selectedDifficulty = null;
         this.step = 0;
         this.visitedSteps = new Set();
+        this.initialState = null;
     }
 
     init(data) {
         super.init(data);
+        this.initialState = {
+            selectedGroups: [...(data?.selectedGroups || [])],
+            selectedMode: data?.selectedMode || null,
+            selectedDifficulty: data?.selectedDifficulty || null,
+            step: Number.isInteger(data?.step) ? data.step : 0,
+            visitedSteps: data?.visitedSteps || []
+        };
     }
     
     preload() {
@@ -34,11 +47,11 @@ class CodonStartScene extends BioPhaser.BioScene {
         this.createLayers();
         BioPhaser.UI.Helpers.addMenuButton(this);
 
-        this.selectedGroups = [];
-        this.selectedMode = null;
-        this.selectedDifficulty = null;
-        this.step = 0;
-        this.visitedSteps = new Set();
+        this.selectedGroups = [...(this.initialState?.selectedGroups || [])];
+        this.selectedMode = this.initialState?.selectedMode || null;
+        this.selectedDifficulty = this.initialState?.selectedDifficulty || null;
+        this.step = Number.isInteger(this.initialState?.step) ? this.initialState.step : 0;
+        this.visitedSteps = new Set(this.initialState?.visitedSteps || []);
 
         BioPhaser.UI.Helpers.createStandardBackground(this);
         this.ensurePersistentStepDNA();
@@ -116,15 +129,24 @@ class CodonStartScene extends BioPhaser.BioScene {
         }).setOrigin(0, 0);
         layer.add(descText);
 
-        const chips = ['mRNR', 'Kodonai', 'Aminorūgštys'];
-        chips.forEach((label, i) => {
-            const chipX = leftX + i * 164;
-            const chipBg = this.add.rectangle(chipX + 58, 545, 116, 36,
-                parseInt(THEME.primary.replace('#', '0x')), 0.1).setOrigin(0.5);
-            const chipText = this.add.text(chipX + 58, 545, label, {
-                fontSize: '14px', fontStyle: 'bold', color: THEME.primary, fontFamily: FONT
-            }).setOrigin(0.5);
-            layer.add([chipBg, chipText]);
+        const chips = [
+            { label: 'mRNR', color: THEME.primary, width: 116 },
+            { label: 'Kodonai', color: THEME.info, width: 124 },
+            { label: 'Aminorūgštys', color: THEME.warning, width: 168 }
+        ];
+        let chipCursorX = leftX;
+        chips.forEach((chip) => {
+            const chipW = chip.width;
+            const chipX = chipCursorX + chipW / 2;
+            const chipBg = this.add.rectangle(chipX, 545, chipW, 38, 0xF8FAFC, 1);
+            chipBg.setStrokeStyle(1, 0xD8E2EC);
+            const leftInset = chipX - chipW / 2;
+            const dot = this.add.circle(leftInset + 14, 545, 5, parseInt(chip.color.replace('#', '0x')), 1);
+            const chipText = this.add.text(leftInset + 26, 545, chip.label, {
+                fontSize: '14px', fontStyle: 'bold', color: THEME.text, fontFamily: FONT
+            }).setOrigin(0, 0.5);
+            layer.add([chipBg, dot, chipText]);
+            chipCursorX += chipW + 18;
         });
 
         const startBtn = BioPhaser.UI.Helpers.addModernButton(this, 340, 650, 'Pradėti →', {
@@ -145,7 +167,7 @@ class CodonStartScene extends BioPhaser.BioScene {
         layer.add(cardTitle);
 
         const previewRows = [
-            { codon: 'AUG', label: 'Met (Pradžia)', color: THEME.primary },
+            { codon: 'AUG', label: 'Met', color: THEME.primary },
             { codon: 'UUU', label: 'Phe',           color: THEME.info },
             { codon: 'UAA', label: 'Stop',          color: THEME.danger }
         ];
@@ -182,6 +204,8 @@ class CodonStartScene extends BioPhaser.BioScene {
      */
     showGroupSelection() {
         const centerX = UI.CX;
+        const navBackX = centerX - 300;
+        const navNextX = centerX + 300;
         
         const title = this.add.text(centerX, 145, 'Aminorūgščių grupės', {
             fontSize: '36px',
@@ -261,7 +285,7 @@ class CodonStartScene extends BioPhaser.BioScene {
         this.layers.ui.add(countText);
 
         const hasGroups = this.selectedGroups.length > 0;
-        const continueBtn = BioPhaser.UI.Helpers.addModernButton(this, centerX + 295, 800, 'Tęsti →', {
+        const continueBtn = BioPhaser.UI.Helpers.addModernButton(this, navNextX, 800, 'Tęsti →', {
             width: 190, height: 46,
             variant: 'primary',
             disabled: !hasGroups,
@@ -270,7 +294,7 @@ class CodonStartScene extends BioPhaser.BioScene {
         });
         continueBtn.onClick(() => { this.step = 2; this.showCurrentStep(); });
 
-        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 180, 800, '← Atgal', {
+        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, navBackX, 800, '← Atgal', {
             width: 150, height: 44,
             variant: 'secondary',
             container: this.layers.ui
@@ -286,6 +310,8 @@ class CodonStartScene extends BioPhaser.BioScene {
      */
     showModeSelection() {
         const centerX = UI.CX;
+        const navBackX = centerX - 300;
+        const navNextX = centerX + 300;
         
         const title = this.add.text(centerX, 165, 'Žaidimo režimas', {
             fontSize: '32px',
@@ -326,7 +352,7 @@ class CodonStartScene extends BioPhaser.BioScene {
         });
 
         const hasMode = !!this.selectedMode;
-        const continueBtn = BioPhaser.UI.Helpers.addModernButton(this, centerX + 295, 820, 'Tęsti →', {
+        const continueBtn = BioPhaser.UI.Helpers.addModernButton(this, navNextX, 820, 'Tęsti →', {
             width: 190, height: 46,
             variant: 'primary',
             disabled: !hasMode,
@@ -335,7 +361,7 @@ class CodonStartScene extends BioPhaser.BioScene {
         });
         continueBtn.onClick(() => { this.step = 3; this.showCurrentStep(); });
 
-        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 180, 820, '← Atgal', {
+        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, navBackX, 820, '← Atgal', {
             width: 150, height: 44,
             variant: 'secondary',
             container: this.layers.ui
@@ -351,6 +377,8 @@ class CodonStartScene extends BioPhaser.BioScene {
      */
     showDifficultySelection() {
         const centerX = UI.CX;
+        const navBackX = centerX - 300;
+        const navNextX = centerX + 300;
         
         const title = this.add.text(centerX, 165, 'Sunkumo lygis', {
             fontSize: '32px',
@@ -403,7 +431,7 @@ class CodonStartScene extends BioPhaser.BioScene {
             }
         });
 
-        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 180, 820, '← Atgal', {
+        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, navBackX, 820, '← Atgal', {
             width: 150, height: 44,
             variant: 'secondary',
             container: this.layers.ui
@@ -411,7 +439,7 @@ class CodonStartScene extends BioPhaser.BioScene {
         backBtn.onClick(() => { this.step = 2; this.showCurrentStep(); });
 
         const hasDiff = !!this.selectedDifficulty;
-        const startBtn = BioPhaser.UI.Helpers.addModernButton(this, centerX + 295, 820, 'Pradėti žaidimą', {
+        const startBtn = BioPhaser.UI.Helpers.addModernButton(this, navNextX, 820, 'Pradėti žaidimą', {
             width: 210, height: 46,
             variant: 'primary',
             disabled: !hasDiff,
@@ -466,6 +494,8 @@ class CodonGameScene extends BioPhaser.BioScene {
     }
     
     getModeSettings(mode) {
+        // Konfigūracija iš JSON perkeliama į atskirą objektą,
+        // kad žaidimo logikoje būtų patogu naudoti tik aktualius parametrus.
         const modeConfig = config.modes[mode];
         return {
             label: modeConfig.label,
@@ -510,7 +540,9 @@ class CodonGameScene extends BioPhaser.BioScene {
         const filteredArray = BioPhaser.Utils.DataProcessor.getFilteredItems(
             config.items, config.groups, this.selectedGroups
         );
-        
+
+        // Iš vartotojo pasirinktų grupių suformuojamas aktyvus kodonų rinkinys,
+        // iš kurio generuojama konkreti užduočių seka.
         this.filteredCodons = {};
         filteredArray.forEach(item => {
             this.filteredCodons[item.key] = item.value;
@@ -535,6 +567,7 @@ class CodonGameScene extends BioPhaser.BioScene {
         }
         
         this.createPersistentUI();
+        this.createBackButton();
         this.updateProgress();
         this.showIntro();
     }
@@ -580,6 +613,26 @@ class CodonGameScene extends BioPhaser.BioScene {
                 container: this.layers.uiPersistent
             })
         ).create();
+    }
+
+    createBackButton() {
+        const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 96, 30, '← Atgal', {
+            width: 124,
+            height: 36,
+            variant: 'secondary',
+            container: this.layers.uiPersistent,
+            fontSize: '14px'
+        });
+
+        backBtn.onClick(() => {
+            this.scene.start('CodonStart', {
+                step: 3,
+                selectedGroups: [...this.selectedGroups],
+                selectedMode: this.selectedMode,
+                selectedDifficulty: this.difficulty,
+                visitedSteps: [1, 2, 3]
+            });
+        });
     }
     
     /**

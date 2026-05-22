@@ -1,6 +1,8 @@
 import { BioPhaser } from '../core/bio-phaser.js';
 import { Progress } from '../core/progress.js';
 
+// Aminorūgščių klasifikavimo modulis apjungia įžanginę dalį,
+// klasifikavimo tipo pasirinkimą ir pačią treniruotės sceną.
 const config = await BioPhaser.Utils.ConfigLoader.load('config/amino-acid-classification.json');
 
 const FONT  = BioPhaser.Theme.font;

@@ -1,6 +1,9 @@
 import { BioPhaser } from '../core/bio-phaser.js';
 import { Progress } from '../core/progress.js';
 
+// Pagrindinio meniu modulis.
+// Čia aprašomas žaidimų sąrašas ir pradinis ekranas,
+// iš kurio vartotojas pereina į pasirinktą mokomąjį žaidimą.
 const FONT = 'Inter, Arial, sans-serif';
 
 const THEME = {
@@ -50,6 +53,8 @@ const W  = 1200;
 const H  = 900;
 const CX = 600;
 
+// Navigacija centralizuota vienoje vietoje, kad visi perėjimai tarp puslapių
+// galėtų naudoti tą pačią animuotą logiką.
 function navigateTo(url) {
     if (typeof window.__bioPhaserNavigate === 'function') {
         window.__bioPhaserNavigate(url);
@@ -93,6 +98,8 @@ class MenuScene extends BioPhaser.BioScene {
         this.renderGameCards();
     }
 
+    // Dekoratyviniai elementai neša tik vizualinę funkciją:
+    // jie suteikia meniu gyvumo, bet nedalyvauja žaidimo logikoje.
     renderBackgroundDecor() {
         const decorLayer = this.layers.background ?? this.layers.uiPersistent;
 
@@ -207,6 +214,8 @@ class MenuScene extends BioPhaser.BioScene {
         });
     }
 
+    // Viena kortelė apjungia žaidimo pavadinimą, progresą ir paleidimo mygtuką.
+    // Toks modelis leidžia lengvai plėsti meniu naujais moduliais.
     createGameCard(game, x, y, w, h, index = 0) {
         const cardDelay = 100 + index * 120;
         const left = x - w / 2;
@@ -230,8 +239,7 @@ class MenuScene extends BioPhaser.BioScene {
         const descWrap = game.key === 'alignment'
             ? w - 210
             : Math.max(240, textRight - textX + 8);
-        const progressW = Math.min(240, textRight - textX);
-        const progressTextX = textX + 12;
+        const progressMinW = Math.min(240, textRight - textX);
 
         const bg = this.add.rectangle(x, y, w, h, CARD_FILL, 0.97)
             .setStrokeStyle(1, CARD_STROKE)
@@ -280,14 +288,23 @@ class MenuScene extends BioPhaser.BioScene {
         const progressCenterY = Math.max(progressY, descText.y + descText.height + 18);
         const linkCenterY = progressCenterY + 30;
 
-        const pillBg = this.add.rectangle(textX + progressW / 2, progressCenterY, progressW, 26, 0xF8FAFC, 1)
-            .setStrokeStyle(1, 0xE2E8F0);
-        const pillTxt = this.add.text(progressTextX, progressCenterY, badge.text, {
+        const pillTxt = this.add.text(textX + 12, progressCenterY, badge.text, {
             fontSize: '13px',
             fontFamily: FONT,
             fontStyle: 'bold',
             color: '#64748B'
         }).setOrigin(0, 0.5);
+        const progressMaxW = Math.max(progressMinW, textRight - textX + 6);
+        const progressInnerMaxW = Math.max(120, progressMaxW - 26);
+        if (pillTxt.width > progressInnerMaxW) {
+            pillTxt.setFontSize(12);
+        }
+        if (pillTxt.width > progressInnerMaxW) {
+            pillTxt.setFontSize(11);
+        }
+        const progressW = Math.min(progressMaxW, Math.max(progressMinW, pillTxt.width + 26));
+        const pillBg = this.add.rectangle(textX + progressW / 2, progressCenterY, progressW, 26, 0xF8FAFC, 1)
+            .setStrokeStyle(1, 0xE2E8F0);
 
         const linkTxt = this.add.text(textX, Math.max(linkY, linkCenterY), 'Peržiūrėti pažangą', {
             fontSize: '14px',

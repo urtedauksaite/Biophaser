@@ -1,6 +1,9 @@
 import { BioPhaser } from '../core/bio-phaser.js';
 import { Progress } from '../core/progress.js';
 
+// Motyvo paieškos žaidimo modulis.
+// Jis padalytas į kelias scenas: įvadą, paaiškinimą,
+// nustatymus, užduoties atlikimą ir rezultatų peržiūrą.
 const config = await BioPhaser.Utils.ConfigLoader.load('config/l-mer.json');
 config.width = 1400;
 config.height = 900;
@@ -41,8 +44,8 @@ function toHex(color) {
     return parseInt(color.replace('#', '0x'), 16);
 }
 
-
-
+// Sugeneruoja naują užduotį ir iš karto apskaičiuoja optimalų sprendimą.
+// Tai leidžia objektyviai palyginti vartotojo rezultatą su geriausiu galimu atveju.
 function generateMotifTask({ l, sequenceLength, sequenceCount }) {
     const maxAttempts = config.generation?.maxAttempts || 300;
     const minRatio = config.generation?.minOptimalScoreRatio || 0.65;
@@ -128,7 +131,8 @@ function attachButtonHover(btn, style) {
     );
 }
 
-
+// Bendri UI helperiai naudojami tam, kad visos šio žaidimo scenos
+// išlaikytų vienodą vizualinę struktūrą ir mažiau dubliuotų kodą.
 function addCard(scene, x, y, w, h, {
     fill = THEME.panel,
     stroke = THEME.panelStroke,
@@ -221,7 +225,7 @@ class BaseScene extends BioPhaser.BioScene {
         BioPhaser.Utils.AssetLoader.preloadFromConfig?.(this, config);
     }
 
-    createBase() {
+    createBase({ showMenuButton = true } = {}) {
         this.createLayers();
         this.layers.bg?.setDepth?.(-100);
         this.layers.world?.setDepth?.(0);
@@ -229,7 +233,9 @@ class BaseScene extends BioPhaser.BioScene {
         this.layers.ui?.setDepth?.(101);
         this.layers.modal?.setDepth?.(1000);
         BioPhaser.UI.Helpers.createStandardBackground(this);
-        BioPhaser.UI.Helpers.addMenuButton(this);
+        if (showMenuButton) {
+            BioPhaser.UI.Helpers.addMenuButton(this);
+        }
     }
 
     renderHeader(title, subtitle) {
@@ -237,6 +243,8 @@ class BaseScene extends BioPhaser.BioScene {
     }
 }
 
+// Įvadinė scena trumpai parodo žaidimo idėją,
+// prieš vartotojui pereinant prie teorinio paaiškinimo.
 class MotifStartScene extends BaseScene {
     constructor() { super('KmerStart'); }
 
@@ -439,6 +447,8 @@ class MotifExplainScene extends BaseScene {
     }
 }
 
+// Nustatymų scena leidžia valdyti sugeneruojamos užduoties sudėtingumą
+// per l reikšmę, sekų ilgį ir sekų kiekį.
 class MotifSetupScene extends BaseScene {
     constructor() {
         super('KmerSetup');
@@ -636,7 +646,7 @@ class MotifTaskScene extends BaseScene {
     }
 
     create() {
-        this.createBase();
+        this.createBase({ showMenuButton: false });
         if (!this.task) {
             this.renderHeader('Užduotis nerasta', 'Nepavyko paruošti analizės užduoties.');
             return;
@@ -645,6 +655,8 @@ class MotifTaskScene extends BaseScene {
         this.renderStage();
     }
 
+    // Paruošiamos duomenų struktūros kiekvienai sekai,
+    // kad tarp scenos perkrovimų būtų išlaikyta vartotojo pažanga.
     ensureState() {
         const seqCount = this.task.sequences.length;
         while (this.collectedLmers.length < seqCount) this.collectedLmers.push([]);
@@ -671,6 +683,8 @@ class MotifTaskScene extends BaseScene {
         else this.renderEvaluateStage();
     }
 
+    // Pirmame etape vartotojas pažymi visus galimus l-merus.
+    // Taip prieš vertinimą įtvirtinamas pats motyvo paieškos principas.
     renderCollectStage() {
         const l = this.task.l;
         const sequence = this.task.sequences[this.collectIndex];
@@ -1238,7 +1252,10 @@ class MotifTaskScene extends BaseScene {
         ).setOrigin(0, 0));
 
         if (!solved) {
-            const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 430, bottomY, '← Keisti pasirinkimus', { variant: 'secondary' });
+            const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 430, bottomY, '← Keisti pasirinkimus', {
+                width: 270,
+                variant: 'secondary'
+            });
             backBtn.onClick(() => this.restartSelf({ stage: 'choose' }));
 
             const newTaskBtn = BioPhaser.UI.Helpers.addModernButton(this, 970, bottomY, 'Nauja užduotis', { variant: 'primary' });
@@ -1248,7 +1265,10 @@ class MotifTaskScene extends BaseScene {
                 selectedSequenceCount: this.task?.sequenceCount ?? this.task?.sequences?.length ?? null
             }));
         } else {
-            const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 430, bottomY, '← Keisti pasirinkimus', { variant: 'secondary' });
+            const backBtn = BioPhaser.UI.Helpers.addModernButton(this, 430, bottomY, '← Keisti pasirinkimus', {
+                width: 270,
+                variant: 'secondary'
+            });
             backBtn.onClick(() => this.restartSelf({ stage: 'choose' }));
 
             const resultBtn = BioPhaser.UI.Helpers.addModernButton(this, 760, bottomY, 'Rezultatai →', { variant: 'secondary' });
@@ -1281,6 +1301,8 @@ class MotifResultsScene extends BaseScene {
     create() {
         this.createBase();
 
+        // Rezultatų ekrane rodoma ne tik surinkta reikšmė,
+        // bet ir teorinis maksimumas bei gautas konsensusas.
         addCard(this, UI.CX, 430, 900, 540, { fill: 0xFFFFFF, stroke: COLORS.border, shadow: true });
         this.layers.ui.add(this.add.text(UI.CX, 170, 'Rezultatai', {
             fontFamily: FONT,

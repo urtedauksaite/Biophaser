@@ -1,5 +1,7 @@
 const STORAGE_KEY = 'biophaser_progress';
 
+// Bendras progreso modulis visiems žaidimams.
+// Čia apibrėžiamas vienodas rezultatų saugojimo formatas localStorage terpėje.
 const GAME_PALETTES = {
     amino:     { accent: '#F97316', soft: 0xFFF7ED, tint: '#9A3412' },
     codon:     { accent: '#38BDF8', soft: 0xF0F9FF, tint: '#0C4A6E' },
@@ -57,6 +59,9 @@ function makeAttempt(score, total, details, date) {
     return { score, total, percent: calculatePercent(score, total), date: date || null, details: details || {} };
 }
 
+// Senesnių įrašų suderinamumo sluoksnis:
+// jei naršyklėje randama ankstesnė duomenų struktūra,
+// ji paverčiama į dabartinį formatą neprarandant rezultatų istorijos.
 function normalizeEntry(entry) {
     if (!entry) return null;
     if (entry.best && entry.last && Array.isArray(entry.history)) return entry;
@@ -80,6 +85,8 @@ const Progress = {
         const now     = new Date().toISOString();
         const current = makeAttempt(score, total, details, now);
 
+        // Saugojamas ne tik paskutinis bandymas, bet ir santrauka,
+        // reikalinga progreso bei rezultatų ekranams.
         const attempts = (prev?.attempts || 0) + 1;
         const first    = prev?.first || current;
         const history  = [...(prev?.history || []), current].slice(-30);

@@ -143,6 +143,8 @@ class BioScene extends Phaser.Scene {
      * @private
      */
     _cleanup() {
+        // Pirmiausia įvykdomos visos rankiniu būdu užregistruotos valymo funkcijos,
+        // o tik po to naikinami komponentai. Taip išvengiama nutekėjimų ir kabančių įvykių.
         this.disposables.forEach(fn => {
             try {
                 fn();
@@ -296,6 +298,8 @@ class BioScene extends Phaser.Scene {
      * 3. Išsaugo persistent UI (progress bars, badge'us uiPersistent sluoksnyje)
      */
     cleanupUI() {
+        // Šis metodas naudojamas, kai scena lieka ta pati,
+        // tačiau reikia pilnai perpiešti jos laikiną vartotojo sąsajos būseną.
         (this.uiComponents || []).forEach(c => {
             try {
                 c.destroy?.();
@@ -361,6 +365,8 @@ class GameObject {
     addElement(element, container = null) {
         this.elements.push(element);
         
+        // Jei komponentas turi konteinerį, visi jo elementai automatiškai keliauja į jį.
+        // Taip vienas komponentas gali būti valdomas kaip vientisas blokas.
         const targetContainer = container || this.container;
         if (targetContainer && targetContainer.add) {
             targetContainer.add(element);
@@ -468,6 +474,8 @@ class Button extends GameObject {
      * @returns {Button} this metodų grandinei
      */
     create() {
+        // Mygtukas realizuotas kaip tekstinis Phaser objektas,
+        // todėl jo stilių galima lanksčiai keisti tiesiog per tekstines savybes.
         this.element = this.scene.add.text(this.x, this.y, this.text, this.style)
             .setOrigin(0.5)
             .setInteractive();
@@ -953,6 +961,8 @@ class Timer extends GameObject {
     start() {
         if (this.isRunning) return this;
         
+        // Laikmatis remiasi scenos laiko sistema,
+        // todėl automatiškai sinchronizuojasi su Phaser ciklu ir scenos pauzėmis.
         this.isRunning = true;
         this.event = this.scene.addTimer({
             delay: 1000,
@@ -1045,6 +1055,8 @@ class Timer extends GameObject {
  */
 class Notification {
     static show(scene, message, type = 'info', duration = 2000) {
+        // Pranešimas kuriamas trumpalaikiai ir nėra registruojamas kaip pilnas komponentas,
+        // nes jo gyvavimo ciklą pilnai valdo dvi nuoseklios animacijos.
         const centerX = scene.scale.width / 2;
         const centerY = scene.scale.height / 2;
         
@@ -1181,6 +1193,8 @@ class ParticleSystem extends GameObject {
  */
 const Decor = {
     renderBubbles(scene, options = {}) {
+        // Fono fazė saugoma globaliau žaidimo objekte, kad pereinant tarp scenų
+        // dekoracijos neatrodytų staiga „persikrovusios“ ir judėtų tolygiai.
         const layer = options.layer ?? scene.layers?.background ?? scene.layers?.uiPersistent;
         const W     = options.width  ?? scene.scale.width;
         const H     = options.height ?? scene.scale.height;
@@ -1271,7 +1285,6 @@ const Decor = {
             addDecor({ x: W * 0.792, y: H * 0.272, scale: 0.38, alpha: 0.11, angle: -10, dx: -10, dy:  10, rotateBy: -14, pulseBy: 0.03, duration: 5400 });
         }
 
-        // Bottom left
         addBubble({ x: W*0.133, y: H*0.839, radius: 44, color: COLORS[0], alpha: 0.14, dx:  18, dy: -18, duration: 4400 });
         addBubble({ x: W*0.238, y: H*0.750, radius: 22, color: COLORS[4], alpha: 0.22, dx: -12, dy:  18, duration: 3000 });
         addBubble({ x: W*0.163, y: H*0.900, radius: 13, color: COLORS[1], alpha: 0.28, dx:  14, dy: -12, duration: 2400 });
@@ -1279,7 +1292,6 @@ const Decor = {
         addBubble({ x: W*0.123, y: H*0.706, radius: 18, color: COLORS[5], alpha: 0.24, dx:  12, dy:  18, duration: 2800 });
         addBubble({ x: W*0.263, y: H*0.906, radius: 11, color: COLORS[2], alpha: 0.28, dx:  -8, dy: -16, duration: 2200 });
 
-        // Bottom right
         addBubble({ x: W*0.871, y: H*0.798, radius: 50, color: COLORS[4], alpha: 0.13, dx: -18, dy: -16, duration: 4800 });
         addBubble({ x: W*0.729, y: H*0.720, radius: 20, color: COLORS[0], alpha: 0.22, dx:  14, dy:  18, duration: 3000 });
         addBubble({ x: W*0.804, y: H*0.894, radius: 15, color: COLORS[3], alpha: 0.26, dx: -14, dy: -10, duration: 2500 });
@@ -1287,7 +1299,6 @@ const Decor = {
         addBubble({ x: W*0.707, y: H*0.853, radius: 12, color: COLORS[1], alpha: 0.28, dx: -12, dy: -18, duration: 2300 });
         addBubble({ x: W*0.838, y: H*0.920, radius: 38, color: COLORS[2], alpha: 0.14, dx: -20, dy: -14, duration: 4200 });
 
-        // Top
         addBubble({ x: W*0.215, y: H*0.176, radius: 24, color: COLORS[3], alpha: 0.20, dx:  14, dy:  12, duration: 3200 });
         addBubble({ x: W*0.768, y: H*0.220, radius: 18, color: COLORS[0], alpha: 0.22, dx: -16, dy:  14, duration: 2800 });
         addBubble({ x: W*0.415, y: H*0.142, radius: 13, color: COLORS[5], alpha: 0.26, dx:  12, dy: -10, duration: 2400 });
@@ -1421,6 +1432,7 @@ class TweenHelper {
     }
 }
 
+// Navigacija palikta framework lygyje, kad visos scenos naudotų tą patį perėjimo mechanizmą.
 function navigateTo(url) {
     if (typeof window !== 'undefined' && typeof window.__bioPhaserNavigate === 'function') {
         window.__bioPhaserNavigate(url);
@@ -1459,7 +1471,6 @@ class Effects {
                             star.destroy();
                         }
                     } catch (e) {
-                        // Tylus fail
                     }
                 }
             });
@@ -1544,6 +1555,8 @@ class SequenceMatching {
     insertTargets(targetKey, itemSize, count) {
         this.targetPositions = [];
         
+        // Tiksliniai fragmentai įterpiami tiesiai į sugeneruotą seką,
+        // todėl vėliau galima tiksliai žinoti visas jų pradžios pozicijas.
         for (let i = 0; i < count; i++) {
             const pos = Phaser.Math.Between(0, this.sequence.length - itemSize);
             
@@ -1629,6 +1642,8 @@ class ScoreManager {
     }
     
     getScore() {
+        // Galutinis balas susideda iš bazinių taškų ir serijos premijos,
+        // todėl skatinamas ne tik tikslumas, bet ir nuoseklus teisingų atsakymų srautas.
         let base = this.correct * this.pointsPerCorrect;
         let bonus = this.maxStreak >= 5 
             ? Math.floor(this.maxStreak * this.bonusMultiplier) 
@@ -1674,6 +1689,8 @@ class DataProcessor {
     static getFilteredItems(items, groups, selectedGroups) {
         const filtered = [];
         
+        // Filtravimas atskirtas į bendrą utilitą,
+        // kad skirtingi žaidimai tą pačią grupavimo logiką naudotų vienodai.
         Object.entries(items).forEach(([key, value]) => {
             const group = this.getItemGroup(value, groups);
             if (selectedGroups.includes(group)) {
@@ -1719,6 +1736,8 @@ class ConfigLoader {
  */
 class AssetLoader {
     static preloadFromConfig(scene, config) {
+        // Ištekliai kraunami tik tada, jei tekstūra dar neegzistuoja.
+        // Tai sumažina pakartotinį tų pačių paveikslėlių įkėlimą tarp scenų.
         if (config.assets?.images) {
             Object.entries(config.assets.images).forEach(([key, path]) => {
                 if (!scene.textures.exists(key)) {
@@ -1799,6 +1818,8 @@ const Helpers = {
         };
     },
 
+    // Standartizuotas panelės generatorius leidžia skirtingiems žaidimams
+    // naudoti vienodą kortelių geometriją ir kontūrų stilių.
     createPanel(scene, options = {}) {
         const {
             x,
@@ -1904,6 +1925,8 @@ const Helpers = {
             disabled = false, container = null, fontSize = '17px'
         } = options;
 
+        // Visi mygtukų variantai aprašomi vienoje vietoje,
+        // todėl pakeitus spalvinę sistemą ji automatiškai atsinaujina visame projekte.
         const styles = {
             primary:   { bg: Theme.colors.primary,    hover: Theme.colors.primaryHover, text: '#FFFFFF', stroke: parseInt(Theme.colors.primary.replace('#', '0x'))  },
             secondary: { bg: '#F1F5F9',               hover: '#E2E8F0',                 text: Theme.colors.text, stroke: 0xD8E2EC },
@@ -1992,6 +2015,8 @@ const Helpers = {
         const group       = scene.add.container(x, y);
         layer.add(group);
 
+        // Pasirinkimo eilutė sukurta kaip bendras šablonas sudėtingesniems nustatymų ekranams,
+        // kur vienoje vietoje reikia pavadinimo, aprašymo ir pasirinkimo būsenos.
         const colorInt    = parseInt(color.replace('#', '0x'));
         const bgColor     = selected ? 0xECFDF5 : 0xFFFFFF;
         const strokeColor = selected ? parseInt(Theme.colors.primary.replace('#', '0x')) : 0xD8E2EC;
@@ -2130,6 +2155,7 @@ const Helpers = {
 // ========================================
 
 const Theme = {
+    // Dizaino sistema suvienodina tipografiją, bazines spalvas ir nukleotidų atvaizdavimą.
     font: 'Inter, Arial, sans-serif',
 
     colors: {
@@ -2187,6 +2213,8 @@ const MotifSearch = {
             return { consensus: '', score: 0, columnScores: [], columns: [] };
         }
 
+        // Konsensusas sudaromas stulpeliais:
+        // kiekvienoje pozicijoje pasirenkama dažniausiai pasikartojanti bazė.
         const l = selectedLmers[0].length;
         let consensus = '';
         let score = 0;
@@ -2228,6 +2256,8 @@ const MotifSearch = {
     },
 
     _cartesianProduct(arrays) {
+        // Kartesinė sandauga leidžia sugeneruoti visas galimas kombinacijas,
+        // pasirenkant po vieną l-merą iš kiekvienos sekos.
         return arrays.reduce((acc, curr) => {
             const result = [];
             acc.forEach((a) => {
@@ -2244,6 +2274,8 @@ const MotifSearch = {
         const combinations = this._cartesianProduct(lmerGroups);
         let best = null;
 
+        // Optimalus motyvas randamas pilna paieška:
+        // įvertinamos visos kombinacijos ir paliekama ta, kurios konsensuso svoris didžiausias.
         combinations.forEach((combo) => {
             const values        = combo.map((item) => item.value);
             const consensusData = this.computeConsensus(values);

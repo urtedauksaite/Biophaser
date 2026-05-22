@@ -1,6 +1,9 @@
 import { BioPhaser } from '../core/bio-phaser.js';
 import { Progress } from '../core/progress.js';
 
+// Sekų išlyginimo modulis apjungia vartotojo sąsają ir algoritminę dalį.
+// To reikia todėl, kad žaidimas ne tik rodo sekas, bet ir pats apskaičiuoja
+// etaloninį išlyginimą bei tikslinį balą.
 
 const config = await BioPhaser.Utils.ConfigLoader.load('config/sequence-alignment.json');
 
@@ -91,7 +94,7 @@ function attachButtonHover(btn, style) {
 }
 
 
-
+// Įvadinė scena trumpai pristato užduoties esmę prieš pereinant į mokomąją dalį.
 class StartScene extends BioPhaser.BioScene {
     constructor() {
         super('Start', config);
@@ -215,6 +218,8 @@ class StartScene extends BioPhaser.BioScene {
 }
 
 
+// Mokomoji scena paaiškina pagrindinius veiksmus,
+// kuriuos vartotojas atliks konstruodamas išlyginimą.
 class TutorialScene extends BioPhaser.BioScene {
     constructor() {
         super('Tutorial', config);
@@ -340,6 +345,8 @@ class TutorialScene extends BioPhaser.BioScene {
         });
     }
 
+    // Ši animacija parodo tarpų įterpimo ir perkėlimo logiką,
+    // kad vartotojas dar prieš žaidimą suvoktų, kaip formuojami stulpeliai.
     drawMiniExampleState() {
         const MINI_STATES = [
             {
@@ -418,6 +425,8 @@ class TutorialScene extends BioPhaser.BioScene {
 
 
 
+// Nustatymų scena leidžia pasirinkti sekų kiekį, sudėtingumą ir režimą,
+// kurie vėliau lemia sugeneruotos užduoties parametrus.
 class SetupScene extends BioPhaser.BioScene {
     constructor() {
         super('Setup', config);
@@ -694,6 +703,8 @@ class SetupScene extends BioPhaser.BioScene {
     }
 }
 
+// Pagrindinė scena valdo vieną pilną sekų išlyginimo bandymą:
+// generuoja duomenis, priima vartotojo veiksmus ir skaičiuoja galutinį balą.
 class GameScene extends BioPhaser.BioScene {
     constructor() {
         super('Game', config);
@@ -1008,12 +1019,8 @@ class GameScene extends BioPhaser.BioScene {
         }).setOrigin(0.5);
         this.layers.ui.add(modeLbl);
 
-        if (this.mode === 'learning') {
-            this.totalText = this.add.text(116, 74, `${config.text.game.scoreLabel} 0`, {
-                fontSize: '15px', color: THEME.text, fontFamily: FONT, fontStyle: 'bold'
-            }).setOrigin(0.5);
-            this.layers.ui.add(this.totalText);
-        } else {
+        this.totalText = null;
+        if (this.mode !== 'learning') {
             this.timerText = this.add.text(116, 74, '⏱ --:--', {
                 fontSize: '16px', color: THEME.text, fontFamily: FONT, fontStyle: 'bold'
             }).setOrigin(0.5);
@@ -1021,8 +1028,8 @@ class GameScene extends BioPhaser.BioScene {
         }
 
         this.hintText = this.add.text(cx, 40, config.text.game.hint, {
-            fontSize: '15px', color: THEME.text, fontFamily: FONT,
-            wordWrap: { width: 520 }, align: 'center'
+            fontSize: '18px', color: THEME.text, fontFamily: FONT, fontStyle: 'bold',
+            wordWrap: { width: 760 }, align: 'center'
         }).setOrigin(0.5);
         this.layers.ui.add(this.hintText);
 
@@ -1030,7 +1037,7 @@ class GameScene extends BioPhaser.BioScene {
         const lg = config.text.game.scoringLegend;
         const legendStr = `${lg.match} +${s.match}   ${lg.mismatch} ${s.mismatch}   ${lg.gap} ${s.gap}`;
         this.legendText = this.add.text(cx, 76, legendStr, {
-            fontSize: '11px', color: THEME.softText, fontFamily: FONT
+            fontSize: '15px', color: THEME.muted, fontFamily: FONT, fontStyle: 'bold'
         }).setOrigin(0.5);
         this.layers.ui.add(this.legendText);
 
@@ -1824,6 +1831,8 @@ function randomBase(except = null, bases) {
     return choices[randInt(0, choices.length - 1)];
 }
 
+// Sum-of-pairs balas apskaičiuojamas sudedant visų porų įnašus kiekviename stulpelyje.
+// Šis vertinimas naudojamas lyginant vartotojo sprendimą su etaloniniu rezultatu.
 function scoreAlignmentSP(alignedRows, scoring) {
     const n = alignedRows.length;
     if (n < 2) return 0;
@@ -1871,6 +1880,8 @@ function generateReferenceSequence(Lref, bases) {
     return Array.from({ length: Lref }, () => randomBase(null, bases)).join('');
 }
 
+// Sekos generuojamos iš bendros referencinės sekos,
+// sąmoningai įterpiant mutacijas ir indelius, kad užduotis būtų realistiškesnė.
 function generateSequences({ numSeq, minLen, maxLen, similarity, ref = null, allowWindow = true, bases }) {
     const Lref = randInt(Math.max(minLen, 4), Math.max(maxLen, minLen));
     const reference = ref || generateReferenceSequence(Lref, bases);
@@ -2023,7 +2034,9 @@ function gapColScoreWithSeq(profileRows, seqChar, scoring) {
     return s;
     }
 
-    function alignProfileToSequence(profileRows, seq, scoring) {
+// Jei sekų yra daugiau nei dvi, nauja seka lygiuojama prie jau suformuoto profilio,
+// o ne prie vienos sekos. Taip gaunamas progresyvus daugybinis išlyginimas.
+function alignProfileToSequence(profileRows, seq, scoring) {
     const P = profileRows[0].length;
     const M = seq.length;
 
@@ -2114,8 +2127,10 @@ function progressiveAlignment(seqs, scoring) {
             alignedRows: profileRows,
             score: scoreAlignmentSP(profileRows, scoring)
         };
-    }
+}
 
+// Ši funkcija parenka, kurį metodą taikyti etaloniniam balui gauti:
+// porinį Needleman-Wunsch arba progresyvų daugybinį išlyginimą.
 function computeTargetScore(seqs, scoring) {
     if (seqs.length === 2) {
         const r = needlemanWunsch(seqs[0], seqs[1], scoring);
