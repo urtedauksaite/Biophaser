@@ -40,7 +40,8 @@
 
     #game-container {
       width: 100vw;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -50,6 +51,8 @@
     canvas,
     #game-container canvas {
       display: block;
+      max-width: 100vw;
+      max-height: 100vh;
     }
   </style>
   <script>

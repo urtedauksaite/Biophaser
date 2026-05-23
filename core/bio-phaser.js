@@ -78,6 +78,10 @@ class Engine {
             height: this.config.height ?? this.config.ui?.height ?? 900,
             parent: this.config.parent ?? 'game-container',
             backgroundColor: this.config.backgroundColor ?? this.config.ui?.theme?.backgroundColor ?? '#e3f2fd',
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.NO_CENTER
+            },
             scene: this.scenes
         };
         
