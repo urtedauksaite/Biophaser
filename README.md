@@ -29,6 +29,12 @@ Galima paleisti ir su Python:
 python -m http.server 8000
 ```
 
+Jeigu ši komanda neveikia, „macOS“ arba kai kuriose „Linux“ sistemose galima naudoti komandą:
+
+```bash
+python3 -m http.server 8000
+```
+
 Tada atsidaryti naršyklėje:
 
 ```text
